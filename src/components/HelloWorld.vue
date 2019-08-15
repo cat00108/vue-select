@@ -90,14 +90,6 @@
             contactName: 'motys',
             contactPhone: '13888888888',
             thirdPayAmount: 12
-          },
-          {
-            storeLogo: 'http://b-ssl.duitang.com/uploads/item/201805/13/20180513224039_tgfwu.png',
-            orderSn: 5,
-            mealNumber: 1,
-            contactName: 'motys',
-            contactPhone: '13888888888',
-            thirdPayAmount: 12
           }
         ],
         checkList: [],
