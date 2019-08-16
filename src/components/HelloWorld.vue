@@ -1,6 +1,8 @@
 <template>
 
     <main ref="wrapper" class="scroll_box">
+      <v-refresh :on-refresh="onRefresh">
+      <v-reload :on-infinite-load="onInfiniteLoad" :parent-pull-up-state="infiniteLoadData.pullUpState">
       <div class="list" v-if="dataList.length">
         <div class="list_item" v-for="(item, index) of dataList" :key="index" @click="check(item)">
           <div class="img_wrap">
@@ -42,12 +44,20 @@
         </div>
         <div class="submit">提交</div>
       </div>
+      </v-reload>
+      </v-refresh>
     </main>
 </template>
 
 <script>
+  import DropDownRefresh from './DropDownRefresh'
+  import PullUpReload from './PullUpReload'
   export default {
     name: 'expense',
+    components: {
+      'v-refresh': DropDownRefresh,
+      'v-reload': PullUpReload
+    },
     data () {
       return {
         dataList: [
@@ -58,43 +68,19 @@
             contactName: 'motys',
             contactPhone: '13888888888',
             thirdPayAmount: 12
-          },
-          {
-            storeLogo: 'http://b-ssl.duitang.com/uploads/item/201805/13/20180513224039_tgfwu.png',
-            orderSn: 2,
-            mealNumber: 1,
-            contactName: 'motys',
-            contactPhone: '13888888888',
-            thirdPayAmount: 12
-          },
-          {
-            storeLogo: 'http://b-ssl.duitang.com/uploads/item/201805/13/20180513224039_tgfwu.png',
-            orderSn: 3,
-            mealNumber: 1,
-            contactName: 'motys',
-            contactPhone: '13888888888',
-            thirdPayAmount: 12
-          },
-          {
-            storeLogo: 'http://b-ssl.duitang.com/uploads/item/201805/13/20180513224039_tgfwu.png',
-            orderSn: 4,
-            mealNumber: 1,
-            contactName: 'motys',
-            contactPhone: '13888888888',
-            thirdPayAmount: 12
-          },
-          {
-            storeLogo: 'http://b-ssl.duitang.com/uploads/item/201805/13/20180513224039_tgfwu.png',
-            orderSn: 5,
-            mealNumber: 1,
-            contactName: 'motys',
-            contactPhone: '13888888888',
-            thirdPayAmount: 12
           }
         ],
         checkList: [],
         totalList: [],
-        ticket: ''
+        ticket: '',
+        // 上拉加载的设置
+        infiniteLoadData: {
+          initialShowNum: 3, // 初始显示多少条
+          everyLoadingNum: 3, // 每次加载的个数
+          pullUpState: 0, // 子组件的pullUpState状态
+          pullUpList: [], // 上拉加载更多数据的数组
+          showPullUpListLength: this.initialShowNum // 上拉加载后所展示的个数
+        }
       }
     },
     computed: {
@@ -150,6 +136,18 @@
         } else {
           this.checkAll()
         }
+      },
+      // 下拉刷新
+      onRefresh (done) {
+        // 如果下拉刷新和上拉加载同时使用，下拉时初始化上拉的数据
+
+        done() // call done
+      },
+      // 上拉加载
+      onInfiniteLoad (done) {
+        if (this.infiniteLoadData.pullUpState === 0) {
+        }
+        done()
       }
     }
   }
@@ -160,7 +158,7 @@
     height: 100vh;
     position: relative;
     .list {
-      position: absolute;
+      /*position: absolute;*/
       top: 0;
       left: 0;
       right: 0;
